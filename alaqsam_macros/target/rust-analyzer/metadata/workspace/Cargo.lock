@@ -834,7 +834,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "laraxum"
+name = "alaqsam"
 version = "0.1.0"
 dependencies = [
  "axum",
@@ -847,7 +847,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "laraxum_macros"
+name = "alaqsam_macros"
 version = "0.1.0"
 dependencies = [
  "darling",

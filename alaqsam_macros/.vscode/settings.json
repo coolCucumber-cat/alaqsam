@@ -1,0 +1,12 @@
+{
+	"markdown.validate.ignoredLinks": [
+		"../alaqsam/model/trait.Model.html",
+		"../alaqsam/model/trait.AggregateOne.html",
+		"../alaqsam/model/trait.AggregateMany.html",
+		"../alaqsam/model/trait.ManyModel.html",
+		"../alaqsam/controller/trait.Controller.html",
+		"../alaqsam/controller/auth/index.html",
+		"../alaqsam/model/types/trait.Decode.html",
+		"../alaqsam/model/types/trait.Encode.html"
+	]
+}

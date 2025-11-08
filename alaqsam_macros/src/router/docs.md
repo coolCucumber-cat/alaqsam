@@ -11,7 +11,7 @@ The router has methods and routes. A route is a path and a router, which makes i
 // There are tables and functions defined in the `db` module.
 mod db;
 ...
-use laraxum::{router, serve, AppError, Connect};
+use alaqsam::{router, serve, AppError, Connect};
 ...
 #[tokio::main]
 async fn main() -> Result<(), AppError> {

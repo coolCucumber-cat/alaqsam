@@ -34,16 +34,16 @@ impl From<&stage2::Router<'_>> for Router {
                                 .route(
                                     #path,
                                     ::axum::routing::MethodRouter::new()
-                                        .get(<#ty as ::laraxum::Controller>::get_many)
-                                        .post(<#ty as ::laraxum::Controller>::create),
+                                        .get(<#ty as ::alaqsam::Controller>::get_many)
+                                        .post(<#ty as ::alaqsam::Controller>::create),
                                 )
                                 .route(
                                     #path_id,
                                     ::axum::routing::MethodRouter::new()
-                                        .get(<#ty as ::laraxum::Controller>::get)
-                                        .put(<#ty as ::laraxum::Controller>::update)
-                                        .patch(<#ty as ::laraxum::Controller>::patch)
-                                        .delete(<#ty as ::laraxum::Controller>::delete),
+                                        .get(<#ty as ::alaqsam::Controller>::get)
+                                        .put(<#ty as ::alaqsam::Controller>::update)
+                                        .patch(<#ty as ::alaqsam::Controller>::patch)
+                                        .delete(<#ty as ::alaqsam::Controller>::delete),
                                 )
 
                         }

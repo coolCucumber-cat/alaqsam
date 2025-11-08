@@ -1,4 +1,4 @@
 [workspace]
-members = ["laraxum", "laraxum_macros"]
-default-members = ["laraxum"]
+members = ["alaqsam", "alaqsam_macros"]
+default-members = ["alaqsam"]
 resolver = "3"

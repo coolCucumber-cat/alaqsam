@@ -1,31 +1,32 @@
 [package]
-name = "laraxum"
-version = "0.2.6"
+name = "alaqsam"
+version = "0.1.0"
 edition = "2024"
 license = "GPL-2.0-only"
-repository = "https://github.com/coolCucumber-cat/laraxum.git"
+repository = "https://github.com/coolCucumber-cat/alaqsam.git"
 description = """
 Create API database servers easily using Axum and SQLX.
 """
 categories = ["database"]
 
 [dependencies]
-laraxum_macros = { version = "0.2.5", optional = true }
+alaqsam_macros = { path = "../alaqsam_macros", optional = true }
+# alaqsam_macros = { version = "0.2.5", optional = true }
 sqlx = "0.8.6"
 axum = "0.8.6"
-axum-extra = { version = "0.10.3", features = ["typed-header"] }
+axum-extra = { version = "0.12.1", features = ["typed-header"] }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.145"
 mime = "0.3.17"
 bytes = "1.10.1"
 thiserror = "2.0.17"
-jsonwebtoken = { version = "10.1.0", features = ["rust_crypto"], optional = true }
+jsonwebtoken = { version = "10.2.0", features = ["rust_crypto"], optional = true }
 chrono = { version = "0.4.42", optional = true }
 time = { version = "0.3.44", optional = true }
 
 [features]
 default = ["mysql", "macros", "auth_token"]
-macros = ["dep:laraxum_macros"]
+macros = ["dep:alaqsam_macros"]
 mysql = ["sqlx/mysql"]
 postgres = ["sqlx/postgres"]
 sqlite = ["sqlx/sqlite"]

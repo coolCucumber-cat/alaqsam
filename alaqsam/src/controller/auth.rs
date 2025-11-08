@@ -208,12 +208,12 @@ where
         let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
             .unwrap_or_default();
-        let exp = now
+        let secs = now
             .checked_add(duration)
             .unwrap_or(core::time::Duration::MAX)
             .as_secs();
-        let exp = usize::try_from(exp).unwrap_or(usize::MAX);
-        Self { exp, token }
+        let secs = usize::try_from(secs).unwrap_or(usize::MAX);
+        Self::new_with_secs(token, secs)
     }
     pub const fn new_with_secs(token: T, secs: usize) -> Self {
         Self { exp: secs, token }
