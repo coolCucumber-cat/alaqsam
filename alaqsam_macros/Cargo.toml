@@ -1,11 +1,11 @@
 [package]
-name = "laraxum_macros"
-version = "0.2.5"
+name = "alaqsam_macros"
+version = "0.1.0"
 edition = "2024"
 license = "GPL-2.0-only"
-repository = "https://github.com/coolCucumber-cat/laraxum.git"
+repository = "https://github.com/coolCucumber-cat/alaqsam.git"
 description = """
-Macros for the laraxum crate
+Macros for the alaqsam crate
 """
 categories = ["database"]
 
@@ -14,9 +14,9 @@ proc-macro = true
 
 [dependencies]
 proc-macro2 = "1.0.103"
-syn = { version = "2.0.108", features = ["full", "extra-traits"] }
+syn = { version = "2.0.109", features = ["full", "extra-traits"] }
 darling = "0.21.3"
-quote = "1.0.41"
+quote = "1.0.42"
 fmt2 = "0.3.4"
 
 [features]

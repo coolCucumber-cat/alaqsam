@@ -471,7 +471,7 @@ impl<'a> Table<'a> {
             syn::parse_quote!(
                 Vec<
                     <
-                        #many_foreign_table_rs_name as ::laraxum::ManyModel<#aggregate_rs_name>
+                        #many_foreign_table_rs_name as ::alaqsam::ManyModel<#aggregate_rs_name>
                     >::ManyRequest
                 >
             )

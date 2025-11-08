@@ -583,7 +583,7 @@ fn response_getter_column(
     if is_optional {
         quote! {
             if let ::core::option::Option::Some(v) = #field_access {
-                ::core::option::Option::Some(::laraxum::model::types::Decode::decode(v))
+                ::core::option::Option::Some(::alaqsam::model::types::Decode::decode(v))
             } else {
                 ::core::option::Option::None
             }
@@ -591,14 +591,14 @@ fn response_getter_column(
     } else if is_parent_optional {
         quote! {
             if let ::core::option::Option::Some(v) = #field_access {
-                ::laraxum::model::types::Decode::decode(v)
+                ::alaqsam::model::types::Decode::decode(v)
             } else {
                 return ::core::result::Result::Ok(::core::option::Option::None);
             }
         }
     } else {
         quote! {
-            ::laraxum::model::types::Decode::decode(#field_access)
+            ::alaqsam::model::types::Decode::decode(#field_access)
         }
     }
 }
@@ -679,7 +679,7 @@ fn response_getter(
             };
             quote! {
                 ::core::result::Result::map_err(
-                    <#many_foreign_table_rs_name as ::laraxum::ManyModel::<
+                    <#many_foreign_table_rs_name as ::alaqsam::ManyModel::<
                         #table_rs_name,
                     >>::get_many(
                         db,
@@ -716,7 +716,7 @@ fn transform_response_one(
         let mut response = ::core::pin::pin!(response);
         let response: ::core::option::Option<_> =
             ::futures::TryStreamExt::try_next(&mut response).await?;
-        ::core::option::Option::ok_or(response, ::laraxum::Error::NotFound)
+        ::core::option::Option::ok_or(response, ::alaqsam::Error::NotFound)
     }}
 }
 fn transform_response_many(
@@ -765,12 +765,12 @@ fn request_setter(
         quote! {
             ::core::option::Option::map(
                 #request,
-                ::laraxum::model::types::Encode::encode,
+                ::alaqsam::model::types::Encode::encode,
             )
         }
     } else {
         quote! {
-            ::laraxum::model::types::Encode::encode(#request)
+            ::alaqsam::model::types::Encode::encode(#request)
         }
     }
 }
@@ -921,7 +921,7 @@ impl From<stage3::Table<'_>> for Table {
                 #( #response_fields ),*
             }
 
-            impl ::laraxum::model::types::Decode for #table_rs_name {
+            impl ::alaqsam::model::types::Decode for #table_rs_name {
                 type Decode = Self;
                 #[inline]
                 fn decode(decode: Self::Decode) -> Self {
@@ -929,7 +929,7 @@ impl From<stage3::Table<'_>> for Table {
                 }
             }
 
-            impl ::laraxum::model::types::Encode for #table_rs_name {
+            impl ::alaqsam::model::types::Encode for #table_rs_name {
                 type Encode = Self;
                 #[inline]
                 fn encode(self) -> Self::Encode {
@@ -937,9 +937,9 @@ impl From<stage3::Table<'_>> for Table {
                 }
             }
 
-            impl ::laraxum::Db<#table_rs_name> for #db_rs_name {}
+            impl ::alaqsam::Db<#table_rs_name> for #db_rs_name {}
 
-            impl ::laraxum::Table for #table_rs_name {
+            impl ::alaqsam::Table for #table_rs_name {
                 type Db = #db_rs_name;
                 type Response = #table_rs_name;
             }
@@ -1012,7 +1012,7 @@ impl From<stage3::Table<'_>> for Table {
                         many_foreign_table_rs_name,
                     } = column;
                     quote! {{
-                        <#many_foreign_table_rs_name as ::laraxum::ManyModel::<
+                        <#many_foreign_table_rs_name as ::alaqsam::ManyModel::<
                             #aggregate_rs_name,
                         >>::create_many(
                             db,
@@ -1030,14 +1030,14 @@ impl From<stage3::Table<'_>> for Table {
                     #( #create_request_fields )*
                 }
 
-                impl ::laraxum::Collection for #table_rs_name {
+                impl ::alaqsam::Collection for #table_rs_name {
                     type CreateRequest = #create_request_rs_name;
                     type CreateRequestError = #request_error_rs_name;
 
                     async fn get_all(db: &Self::Db)
                         -> ::core::result::Result<
                             ::std::vec::Vec<Self::Response>,
-                            ::laraxum::Error,
+                            ::alaqsam::Error,
                         >
                     {
                         #get_all
@@ -1048,11 +1048,11 @@ impl From<stage3::Table<'_>> for Table {
                     )
                         -> ::core::result::Result<
                             (),
-                            ::laraxum::ModelError<Self::CreateRequestError>>
+                            ::alaqsam::ModelError<Self::CreateRequestError>>
                     {
                         <
-                            Self::CreateRequest as ::laraxum::model::request::Request::<
-                                ::laraxum::model::request::method::Create
+                            Self::CreateRequest as ::alaqsam::model::request::Request::<
+                                ::alaqsam::model::request::method::Create
                             >
                         >::validate(&request)?;
                         let transaction = db.pool.begin().await?;
@@ -1138,7 +1138,7 @@ impl From<stage3::Table<'_>> for Table {
                         let validates = validates.map(|validate| {
                             quote! {
                                 if let ::core::result::Result::Err(err) = #validate {
-                                    ::laraxum::model::request::error_builder::<
+                                    ::alaqsam::model::request::error_builder::<
                                         (),
                                         Self::Error,
                                     >(
@@ -1189,14 +1189,14 @@ impl From<stage3::Table<'_>> for Table {
                     #( #request_error_fields )*
                 }
                 impl ::core::convert::From<#request_error_rs_name>
-                    for ::laraxum::ModelError<#request_error_rs_name>
+                    for ::alaqsam::ModelError<#request_error_rs_name>
                 {
                     fn from(value: #request_error_rs_name) -> Self {
                         Self::UnprocessableEntity(value)
                     }
                 }
 
-                impl ::laraxum::model::request::Request::<::laraxum::model::request::method::Create>
+                impl ::alaqsam::model::request::Request::<::alaqsam::model::request::method::Create>
                     for #create_request_rs_name
                 {
                     type Error = #request_error_rs_name;
@@ -1269,7 +1269,7 @@ impl From<stage3::Table<'_>> for Table {
                                 quote::format_ident!("sort"),
                                 quote::format_ident!("sort_{}", column_response_name),
                                 syn::parse_quote! {
-                                    ::laraxum::model::Sort
+                                    ::alaqsam::model::Sort
                                 },
                             )
                         });
@@ -1339,8 +1339,8 @@ impl From<stage3::Table<'_>> for Table {
                                 transform_response(&response_sort_desc, response_getter, is_one);
                             quote! {
                                 match request.sort {
-                                    ::laraxum::model::Sort::Ascending => #response_sort_asc,
-                                    ::laraxum::model::Sort::Descending => #response_sort_desc,
+                                    ::alaqsam::model::Sort::Ascending => #response_sort_asc,
+                                    ::alaqsam::model::Sort::Descending => #response_sort_desc,
                                 }
                             }
                         } else {
@@ -1362,7 +1362,7 @@ impl From<stage3::Table<'_>> for Table {
                         let aggregate_impl_token_stream = if is_one {
                             quote! {
                                 impl
-                                    ::laraxum::AggregateOne<#aggregate_rs_name<#auto_lifetime>>
+                                    ::alaqsam::AggregateOne<#aggregate_rs_name<#auto_lifetime>>
                                     for #table_rs_name
                                 {
                                     type OneRequest<'b> = #aggregate_rs_name<#lifetime>;
@@ -1373,7 +1373,7 @@ impl From<stage3::Table<'_>> for Table {
                                     )
                                         -> ::core::result::Result<
                                             Self::OneResponse,
-                                            ::laraxum::Error,
+                                            ::alaqsam::Error,
                                         >
                                     {
                                         #response
@@ -1383,7 +1383,7 @@ impl From<stage3::Table<'_>> for Table {
                         } else {
                             quote! {
                                 impl
-                                    ::laraxum::AggregateMany<#aggregate_rs_name<#auto_lifetime>>
+                                    ::alaqsam::AggregateMany<#aggregate_rs_name<#auto_lifetime>>
                                     for #table_rs_name
                                 {
                                     type OneRequest<'b> = #aggregate_rs_name<#lifetime>;
@@ -1394,7 +1394,7 @@ impl From<stage3::Table<'_>> for Table {
                                     )
                                         -> ::core::result::Result<
                                             ::std::vec::Vec<Self::ManyResponse>,
-                                            ::laraxum::Error,
+                                            ::alaqsam::Error,
                                         >
                                     {
                                         #response
@@ -1492,7 +1492,7 @@ impl From<stage3::Table<'_>> for Table {
                                 quote! {
                                     #aggregate_get => {
                                         <#table_rs_name as
-                                            ::laraxum::AggregateOne<
+                                            ::alaqsam::AggregateOne<
                                                 #aggregate_rs_name<#auto_lifetime>
                                             >
                                         >::aggregate_one_vec(db, #aggregate_set).await
@@ -1502,7 +1502,7 @@ impl From<stage3::Table<'_>> for Table {
                                 quote! {
                                     #aggregate_get => {
                                         <#table_rs_name as
-                                            ::laraxum::AggregateMany<
+                                            ::alaqsam::AggregateMany<
                                                 #aggregate_rs_name<#auto_lifetime>
                                             >
                                         >::aggregate_many(db, #aggregate_set).await
@@ -1563,7 +1563,7 @@ impl From<stage3::Table<'_>> for Table {
                             #table_aggregate_rs_name,
                         }
                         #impl_deserialize_for_table_aggregate
-                        impl ::laraxum::AggregateMany<#table_aggregate_rs_name> for #table_rs_name {
+                        impl ::alaqsam::AggregateMany<#table_aggregate_rs_name> for #table_rs_name {
                             type OneRequest<'b> = #table_aggregate_rs_name;
                             type ManyResponse = Self;
                             async fn aggregate_many<'a>(
@@ -1572,13 +1572,13 @@ impl From<stage3::Table<'_>> for Table {
                             )
                                 -> ::core::result::Result<
                                     ::std::vec::Vec<Self::ManyResponse>,
-                                    ::laraxum::Error,
+                                    ::alaqsam::Error,
                                 >
                             {
                                 match request {
                                     #( #aggregate_variant_match_token_streams, )*
                                     #table_aggregate_rs_name::#table_aggregate_rs_name => {
-                                        <#table_rs_name as ::laraxum::Collection>::get_all(db).await
+                                        <#table_rs_name as ::alaqsam::Collection>::get_all(db).await
                                     }
                                 }
                             }
@@ -1690,7 +1690,7 @@ impl From<stage3::Table<'_>> for Table {
                         many_foreign_table_rs_name,
                     } = column;
                     quote! {{
-                        <#many_foreign_table_rs_name as ::laraxum::ManyModel::<
+                        <#many_foreign_table_rs_name as ::alaqsam::ManyModel::<
                             #aggregate_rs_name,
                         >>::update_many(
                             db,
@@ -1709,7 +1709,7 @@ impl From<stage3::Table<'_>> for Table {
                         many_foreign_table_rs_name,
                     } = column;
                     quote! { if let ::core::option::Option::Some(#rs_name) = &request.#rs_name {
-                        <#many_foreign_table_rs_name as ::laraxum::ManyModel::<
+                        <#many_foreign_table_rs_name as ::alaqsam::ManyModel::<
                             #aggregate_rs_name,
                         >>::update_many(
                             db,
@@ -1728,7 +1728,7 @@ impl From<stage3::Table<'_>> for Table {
                         many_foreign_table_rs_name,
                     } = column;
                     quote! {{
-                        <#many_foreign_table_rs_name as ::laraxum::ManyModel::<
+                        <#many_foreign_table_rs_name as ::alaqsam::ManyModel::<
                             #aggregate_rs_name,
                         >>::delete_many(
                             db,
@@ -1791,7 +1791,7 @@ impl From<stage3::Table<'_>> for Table {
                     #( #patch_request_fields )*
                 }
 
-                impl ::laraxum::model::request::Request::<::laraxum::model::request::method::Update>
+                impl ::alaqsam::model::request::Request::<::alaqsam::model::request::method::Update>
                     for #update_request_rs_name
                 {
                     type Error = #request_error_rs_name;
@@ -1801,7 +1801,7 @@ impl From<stage3::Table<'_>> for Table {
                         e
                     }
                 }
-                impl ::laraxum::model::request::Request::<::laraxum::model::request::method::Patch>
+                impl ::alaqsam::model::request::Request::<::alaqsam::model::request::method::Patch>
                     for #patch_request_rs_name
                 {
                     type Error = #request_error_rs_name;
@@ -1812,7 +1812,7 @@ impl From<stage3::Table<'_>> for Table {
                     }
                 }
 
-                impl ::laraxum::Model for #table_rs_name {
+                impl ::alaqsam::Model for #table_rs_name {
                     type Id = #table_id_rs_ty;
                     type UpdateRequest = #update_request_rs_name;
                     type UpdateRequestError = #request_error_rs_name;
@@ -1825,7 +1825,7 @@ impl From<stage3::Table<'_>> for Table {
                     )
                         -> ::core::result::Result<
                             Self::Response,
-                            ::laraxum::Error,
+                            ::alaqsam::Error,
                         >
                     {
                         #get_one
@@ -1836,11 +1836,11 @@ impl From<stage3::Table<'_>> for Table {
                     )
                         -> ::core::result::Result<
                             Self::Response,
-                            ::laraxum::ModelError<Self::CreateRequestError>
+                            ::alaqsam::ModelError<Self::CreateRequestError>
                         >
                     {
-                        <Self::CreateRequest as ::laraxum::model::request::Request::<
-                                ::laraxum::model::request::method::Create
+                        <Self::CreateRequest as ::alaqsam::model::request::Request::<
+                                ::alaqsam::model::request::method::Create
                             >
                         >::validate(&request)?;
                         let transaction = db.pool.begin().await?;
@@ -1859,12 +1859,12 @@ impl From<stage3::Table<'_>> for Table {
                     )
                         -> ::core::result::Result<
                             (),
-                            ::laraxum::ModelError<Self::UpdateRequestError>,
+                            ::alaqsam::ModelError<Self::UpdateRequestError>,
                         >
                     {
                         <
-                            Self::UpdateRequest as ::laraxum::model::request::Request::<
-                                ::laraxum::model::request::method::Update
+                            Self::UpdateRequest as ::alaqsam::model::request::Request::<
+                                ::alaqsam::model::request::method::Update
                             >
                         >::validate(&request)?;
                         let transaction = db.pool.begin().await?;
@@ -1881,12 +1881,12 @@ impl From<stage3::Table<'_>> for Table {
                     )
                         -> ::core::result::Result<
                             (),
-                            ::laraxum::ModelError<Self::PatchRequestError>,
+                            ::alaqsam::ModelError<Self::PatchRequestError>,
                         >
                     {
                         <
-                            Self::PatchRequest as ::laraxum::model::request::Request::<
-                                ::laraxum::model::request::method::Patch
+                            Self::PatchRequest as ::alaqsam::model::request::Request::<
+                                ::alaqsam::model::request::method::Patch
                             >
                         >::validate(&request)?;
                         let transaction = db.pool.begin().await?;
@@ -1901,7 +1901,7 @@ impl From<stage3::Table<'_>> for Table {
                     )
                         -> ::core::result::Result<
                             (),
-                            ::laraxum::Error,
+                            ::alaqsam::Error,
                         >
                     {
                         let response = ::sqlx::query!(#delete_one, id);
@@ -1930,25 +1930,25 @@ impl From<stage3::Table<'_>> for Table {
                     async fn get_many(
                         ::axum::extract::State(state):
                             ::axum::extract::State<::std::sync::Arc<Self::State>>,
-                        ::laraxum::AuthToken(_): ::laraxum::AuthToken<Self::Auth>,
+                        ::alaqsam::AuthToken(_): ::alaqsam::AuthToken<Self::Auth>,
                         ::axum::extract::Query(query):
                             ::axum::extract::Query<Self::GetManyRequestQuery>,
                     ) -> ::core::result::Result<
-                            ::laraxum::Json<::std::vec::Vec<Self::Response>>,
-                            ::laraxum::Error,
+                            ::alaqsam::Json<::std::vec::Vec<Self::Response>>,
+                            ::alaqsam::Error,
                         >
                     {
                         let records = <
-                            #table_rs_name as ::laraxum::AggregateMany<#aggregate_rs_name_rs_name>
+                            #table_rs_name as ::alaqsam::AggregateMany<#aggregate_rs_name_rs_name>
                         >::aggregate_many(&*state, query).await?;
-                        ::core::result::Result::Ok(::laraxum::Json(records))
+                        ::core::result::Result::Ok(::alaqsam::Json(records))
 
                     }
                 }
             });
 
             quote! {
-                impl ::laraxum::Controller for #table_rs_name {
+                impl ::alaqsam::Controller for #table_rs_name {
                     type State = #db_rs_name;
                     type Auth = #auth;
                     type GetManyRequestQuery = #get_many_request_query;
@@ -2011,7 +2011,7 @@ impl From<stage3::Table<'_>> for Table {
                 let table_rs_name = table.rs_name;
 
                 quote! {
-                    impl ::laraxum::ManyModel<#aggregate_rs_ty> for #table_rs_name {
+                    impl ::alaqsam::ManyModel<#aggregate_rs_ty> for #table_rs_name {
                         type OneRequest = #one_request_rs_ty;
                         type ManyRequest = #many_request_rs_ty;
                         type ManyResponse = #many_response_rs_ty;
@@ -2022,7 +2022,7 @@ impl From<stage3::Table<'_>> for Table {
                         )
                             -> ::core::result::Result<
                                 ::std::vec::Vec<Self::ManyResponse>,
-                                ::laraxum::Error,
+                                ::alaqsam::Error,
                             >
                         {
                             #get_many_response
@@ -2034,7 +2034,7 @@ impl From<stage3::Table<'_>> for Table {
                         )
                             -> ::core::result::Result<
                                 (),
-                                ::laraxum::Error,
+                                ::alaqsam::Error,
                             >
                         {
                             for many in many {
@@ -2050,14 +2050,14 @@ impl From<stage3::Table<'_>> for Table {
                         )
                             -> ::core::result::Result<
                                 (),
-                                ::laraxum::Error,
+                                ::alaqsam::Error,
                             >
                         {
                             <
-                                Self as ::laraxum::ManyModel<#aggregate_rs_ty>
+                                Self as ::alaqsam::ManyModel<#aggregate_rs_ty>
                             >::delete_many(db, one).await?;
                             <
-                                Self as ::laraxum::ManyModel<#aggregate_rs_ty>
+                                Self as ::alaqsam::ManyModel<#aggregate_rs_ty>
                             >::create_many(db, one, many).await?;
                             ::core::result::Result::Ok(())
                         }
@@ -2067,7 +2067,7 @@ impl From<stage3::Table<'_>> for Table {
                         )
                             -> ::core::result::Result<
                                 (),
-                                ::laraxum::Error,
+                                ::alaqsam::Error,
                             >
                         {
                             let response = ::sqlx::query!(#delete_many, one);
@@ -2139,7 +2139,7 @@ impl From<stage3::Db<'_>> for Db {
         };
 
         let root = std::path::PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());
-        let root = root.join("laraxum");
+        let root = root.join("alaqsam");
         std::fs::create_dir_all(&root).unwrap();
         std::fs::write(root.join("migration_up.sql"), &migration_up).unwrap();
         std::fs::write(root.join("migration_down.sql"), &migration_down).unwrap();
@@ -2170,10 +2170,10 @@ impl From<stage3::Db<'_>> for Db {
                 pub pool: ::sqlx::Pool<#db_pool_type>,
             }
 
-            impl ::laraxum::Connect for #db_ident {
+            impl ::alaqsam::Connect for #db_ident {
                 type Error = ::sqlx::Error;
                 async fn connect() -> ::core::result::Result<Self, Self::Error> {
-                    let connect_options = ::laraxum::model::database_url()
+                    let connect_options = ::alaqsam::model::database_url()
                         .map(|url| {
                             <
                                 <

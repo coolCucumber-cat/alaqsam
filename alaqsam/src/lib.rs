@@ -15,4 +15,4 @@ pub use model::{AggregateMany, AggregateOne, Collection, Connect, Db, ManyModel,
 
 #[cfg(feature = "macros")]
 #[doc(inline)]
-pub use laraxum_macros::{db, router};
+pub use alaqsam_macros::{db, router};

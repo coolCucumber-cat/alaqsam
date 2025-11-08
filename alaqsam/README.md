@@ -1,4 +1,4 @@
-# Laraxum
+# alaqsam
 
 Create backend API servers easily using [Axum](https://crates.io/crates/axum) and [SQLX](https://crates.io/crates/sqlx).  
 It uses the MVC paradigm...:

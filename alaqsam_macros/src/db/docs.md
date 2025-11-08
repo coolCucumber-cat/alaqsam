@@ -452,12 +452,12 @@ pub mod AppDb {
 }
 ```
 
-[Model]: ../laraxum/model/trait.Model.html
-[AggregateOne]: ../laraxum/model/trait.AggregateOne.html
-[AggregateMany]: ../laraxum/model/trait.AggregateMany.html
-[ManyModel]: ../laraxum/model/trait.ManyModel.html
-[Controller]: ../laraxum/controller/trait.Controller.html
-[Controller::GetManyRequestQuery]: ../laraxum/controller/trait.Controller.html#associatedtype.GetManyRequestQuery
-[auth]: ../laraxum/controller/auth/index.html
-[Encode]: ../laraxum/model/types/trait.Encode.html
-[Decode]: ../laraxum/model/types/trait.Decode.html
+[Model]: ../alaqsam/model/trait.Model.html
+[AggregateOne]: ../alaqsam/model/trait.AggregateOne.html
+[AggregateMany]: ../alaqsam/model/trait.AggregateMany.html
+[ManyModel]: ../alaqsam/model/trait.ManyModel.html
+[Controller]: ../alaqsam/controller/trait.Controller.html
+[Controller::GetManyRequestQuery]: ../alaqsam/controller/trait.Controller.html#associatedtype.GetManyRequestQuery
+[auth]: ../alaqsam/controller/auth/index.html
+[Encode]: ../alaqsam/model/types/trait.Encode.html
+[Decode]: ../alaqsam/model/types/trait.Decode.html
