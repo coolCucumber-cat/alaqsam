@@ -10,7 +10,7 @@ Create API database servers easily using Axum and SQLX.
 categories = ["database"]
 
 [dependencies]
-alaqsam_macros = { path = "../alaqsam_macros", optional = true }
+alaqsam_macros = { version = "0.1.0", path = "../alaqsam_macros", optional = true }
 # alaqsam_macros = { version = "0.2.5", optional = true }
 sqlx = "0.8.6"
 axum = "0.8.6"
